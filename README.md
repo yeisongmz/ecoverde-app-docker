@@ -1,0 +1,1 @@
+# ecoverde-app-docker

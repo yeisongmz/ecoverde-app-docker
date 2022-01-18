@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  postgres:
+    image: toleg/postgres_mysql_fdw:12.4
+    container_name: postgres12-4
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./database/postgresql:/var/lib/postgresql/data
+      - "./database/sql/postgres_mysql_setup.sql:/docker-entrypoint-initdb.d/postgres_mysql_setup.sql:z"
+    ports:
+      - 5432:5432
+    restart: always
+volumes:
+    postgres_vol:

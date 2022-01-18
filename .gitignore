@@ -1,0 +1,4 @@
+./database/postgresql
+./backend/war/ecologia-verde.war
+./front/app
+./backend/jdk-8u291-linux-x64.tar

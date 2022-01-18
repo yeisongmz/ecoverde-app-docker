@@ -1,0 +1,47 @@
+
+version: "3.7"
+services:
+  db:
+    image: toleg/postgres_mysql_fdw:12.4
+    container_name: postgres12-4
+    ports:
+     - "5444:5432"
+    volumes:
+      - ./database/postgresql:/var/lib/postgresql/data
+      #- "./database/sql/postgres_mysql_setup.sql:/docker-entrypoint-initdb.d/postgres_mysql_setup.sql:z"
+    environment:
+     - POSTGRES_PASSWORD=postgres
+    restart: always
+  tag:
+    build:
+      context: ./backend/
+      dockerfile: ./backend/Dockerfile
+    container_name: glassfish5_0
+    ports:
+     - "8088:8080"
+     - "5858:4848"
+    volumes:
+     - ./backend/war:/war
+    environment:
+     - DB_NAME=ecologiadb
+     - DB_USER=ecoverde
+     - DB_PASS=ecoverde.2021
+     - DS_NAME=jdbc/ecologia
+    restart: always
+    depends_on:
+     - db
+  front:
+    build:
+      context: ./front/
+      dockerfile: ./Dockerfile
+    container_name: ecologia-apache
+    ports:
+     - "9000:80"
+    volumes:
+      - .app/ecologia-verde-front/ /var/www/ecologia-verde/
+      #- ./ecologia.conf /etc/httpd/sites-enabled/
+    #volumes:
+     #- ./backend/war:/war
+    #restart: always
+    depends_on:
+     - tag
